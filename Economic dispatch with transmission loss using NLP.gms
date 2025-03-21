@@ -14,7 +14,8 @@ Parameters
     b(g) Linear cost coefficient
     c(g) Constant cost coefficient
     Pmin(g) Minimum power generation
-    Pmax(g) Maximum power generation;
+    Pmax(g) Maximum power generation
+    GenCost(g) "Individual generator cost after optimization";
 
 Table GeneratorData(g,*)
      a         b          c         Pmin        Pmax
@@ -58,8 +59,6 @@ Scalar
 
 Pd = 8100;
 
-* Example demand
-
 Variables
     Pg(g) Power generation
     TotalCost Total generation cost;
@@ -75,13 +74,14 @@ MinPowerLimits(g).. Pg(g) =g= Pmin(g);
 MaxPowerLimits(g).. Pg(g) =l= Pmax(g);
 
 CostFunction.. TotalCost =e= sum(g, a(g)*Pg(g)*Pg(g) + b(g)*Pg(g) + c(g));
-
 DemandBalance.. (1 - LossFactor)*sum(g, Pg(g)) =e= Pd;
-
 
 
 Model EconomicDispatch / all /;
 
 Solve EconomicDispatch using NLP minimizing TotalCost;
 
-Display Pg.l, TotalCost.l;
+* Calculate individual generator costs after optimization
+GenCost(g) = a(g)*Pg.l(g)*Pg.l(g) + b(g)*Pg.l(g) + c(g);
+
+Display Pg.l, GenCost, TotalCost.l;
