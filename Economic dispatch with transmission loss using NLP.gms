@@ -1,4 +1,4 @@
-$title Economic Dispatch with Transmission Losses
+$title Economic Dispatch of 26 grid-connected generators with Transmission Losses.
 
 $onText
 Written by
